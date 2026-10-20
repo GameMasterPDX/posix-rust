@@ -1,0 +1,8 @@
+[workspace]
+resolver = "2"
+members = [
+    "posix-lib",
+    "pwd",
+    "true",
+    "false",
+]

@@ -1,5 +1,7 @@
 use std::env;
 
+pub mod variables;
+
 /// A global context designed to be used in POSIX programs.
 ///
 /// A context designed to fulfill the functions needed for the programs defined under the POSIX

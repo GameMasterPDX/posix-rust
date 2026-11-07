@@ -1,5 +1,6 @@
 pub mod functions;
 pub mod variables;
+pub mod sys;
 
 /// A global context designed to be used in POSIX programs.
 ///

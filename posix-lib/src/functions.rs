@@ -1,6 +1,9 @@
 use std::env;
 
 use crate::ExitCode;
+use crate::syscall;
+use crate::sys::SYS_WRITE;
+use crate::sys::SYS_EXIT;
 
 /// Exits the program with the `ExitCode` given
 ///
@@ -18,10 +21,28 @@ use crate::ExitCode;
 pub fn exit(code: ExitCode) -> ! {
     let code_int = code as i32;
 
-    std::process::exit(code_int);
+    let _res = syscall!(SYS_EXIT, code_int);
+
+    loop {}
 }
 
-/// Prints a line to standard output, followed by a new line.
+/// Prints the input text to STDOUT.
+///
+/// See also [`print!`].
+///
+/// # Examples
+///
+/// ```rust
+/// use posix_lib::functions::print;
+///
+/// print("text");
+/// ```
+pub fn print(text: &str) {
+    syscall!(SYS_WRITE, 1, text.as_ptr(), text.len());
+}
+
+
+/// Prints a line to STDOUT, followed by a new line.
 ///
 /// See also [`println!`].
 ///
@@ -33,7 +54,8 @@ pub fn exit(code: ExitCode) -> ! {
 /// print_line("line");
 /// ```
 pub fn print_line(text: &str) {
-    println!("{}", text);
+    print(text);
+    print("\n");
 }
 
 /// Takes in the name of an environment variable and returns it's value, returns an empty string if

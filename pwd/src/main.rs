@@ -1,5 +1,10 @@
 use posix_lib::{
-    ExitCode, PosixContext, exit, get_environment_variable, get_option, posix_init, print_line,
+    ExitCode, PosixContext,
+    functions::{
+        exit, get_current_working_directory, get_environment_variable, get_option, print_line,
+    },
+    posix_init,
+    variables::PATH_MAX,
 };
 
 fn pwd_main(_ctx: PosixContext) {
@@ -8,20 +13,16 @@ fn pwd_main(_ctx: PosixContext) {
     if !get_option('P') {
         working_directory = get_environment_variable("PWD");
 
-        if working_directory.len() + 1 > 256 {
-            working_directory = get_physical_directory();
+        if working_directory.len() + 1 > PATH_MAX {
+            working_directory = get_current_working_directory();
         }
     } else {
-        working_directory = get_physical_directory();
+        working_directory = get_current_working_directory();
     }
 
     print_line(&working_directory);
 
     exit(ExitCode::Success);
-}
-
-fn get_physical_directory() -> String {
-    return "tbd get physical directory".to_string();
 }
 
 posix_init!(pwd_main);
